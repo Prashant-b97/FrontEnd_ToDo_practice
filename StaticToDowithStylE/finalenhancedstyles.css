@@ -1,0 +1,31 @@
+/* TODO: Set the font family to Arial and sans-serif as fallback, add 20px padding, max width of 600px, center the body, and set the background color to #f9f9f9 */
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    max-width: 600px;
+    text-align: center;
+    background-color: #f9f9f9;
+
+}
+
+/* TODO: Center align the header text and set the color to #333 */
+h1 {
+    text-align: center;
+    color: #333;
+
+}
+
+/* TODO: Remove the default list-style and padding for the unordered list */
+ul {
+    list-style: none;
+    padding: 0px;
+}
+
+/* TODO: Set the background color to white, margin of 10px 0, padding of 15px, and border radius of 50 px */
+li {
+    background-color: white;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 50px;
+
+}

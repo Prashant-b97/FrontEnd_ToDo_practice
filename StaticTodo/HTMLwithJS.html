@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My First Web Page</title>
+    <!-- Link to external JavaScript file -->
+    <script src="welcome.js"></script>
+  </head>
+
+  <body>
+    <h1 id="header">Hello, world!</h1>
+    <script>
+      document.getElementById("header").onclick = function() {
+        this.innerHTML = "You clicked me!";
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+    background-color: #f9f9f9;
+}
+
+h1 {
+    text-align: center;/* TODO: Center align the text */
+    color: #333;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    background: white;
+    margin: 10px 0;
+    padding: 15px;/* TODO: Add padding of 15px around list items */
+    border: 1px solid lightgray;
+    border-radius:50px;/* TODO: Add a 1px light gray border with 50px border radius */
+}

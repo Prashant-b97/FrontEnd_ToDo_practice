@@ -1,0 +1,21 @@
+<head>
+  <link rel="stylesheet" type="text/css" href="ExternalCSSFile.css">
+    <style>
+      p {
+        color: red; /* (General) element selector */
+      }
+      
+      .myClass {
+          color: blue; /* (Specific) class selector */
+      }
+      
+      #myID {
+          color: green; /* (Even more specific) ID selector */
+      }
+    </style>
+  </head>
+  <body>
+    <p>This paragraph will be red.</p>
+    <p class="myClass">This paragraph will be blue.</p>
+    <p id="myID" class="myClass">This paragraph will be green.</p>
+  </body>
