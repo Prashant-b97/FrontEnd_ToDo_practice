@@ -1,14 +1,14 @@
 # FocusFlow – Front-End To-Do Practice Lab
 
-A polished to-do application that showcases deliberate practice across HTML, CSS, and vanilla JavaScript. The project started as simple static exercises and evolved into a production-ready experience that recruiters can explore quickly.
+This is a to-do application I built to practice and demonstrate my skills in HTML, CSS, and vanilla JavaScript. The project began with simple static files and evolved into the full-featured app you see today, which I've designed to be a useful tool for developers.
 
-![FocusFlow screenshot](modern-todo-app/assets/focusflow-banner.svg)
+![FocusFlow screenshot](modern-todo-app/assets/focusflow-banner.png)
 
-> ✨ Built while pairing Linux server practice with UI engineering: track Segfault sessions, capture commands, and keep your learning backlog organized.
+> ✨ I built this app to solve a personal need: tracking my notes and tasks from my Linux practice sessions. It's designed to help capture commands, summarize learnings, and manage a personal learning backlog.
 
 ---
 
-## 🔍 Highlights
+## 🔍 Key Features
 
 - **Modern UX:** responsive glassmorphism design, accessible controls, keyboard-friendly dialog editing.
 - **Smart productivity:** filters, search, overdue highlighting, and completion analytics keep you focused on outcomes.
@@ -38,9 +38,9 @@ FrontEnd_ToDo_practice/
 │       ├── app.js
 │       └── styles.css
 └── archive/
-    ├── Javascriptcuminnin/        # Early JS drills (event handling, loops, conditionals)
-    ├── StaticToDowithStylE/        # HTML/CSS iterations with incremental styling
-    └── StaticTodo/                 # Foundational markup experiments
+    ├── Javascriptcuminnin/       # Early JS drills (DOM manipulation, events)
+    ├── StaticToDowithStylE/      # Experiments with CSS and layout
+    └── StaticTodo/               # Foundational HTML markup exercises
 ```
 
 The `archive/` directory preserves the learning journey from raw HTML to a polished app—useful when discussing growth with recruiters.
