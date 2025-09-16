@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FocusFlow – Modern To-Do Practice Lab</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="container header-content">
+        <div>
+          <p class="badge">Segfault Practice Project</p>
+          <h1>FocusFlow</h1>
+          <p class="tagline">A polished to-do experience built while mastering front-end fundamentals, automation, and Linux workflows.</p>
+        </div>
+        <div class="insight-card" aria-live="polite">
+          <p class="insight-title">Today's Score</p>
+          <p class="insight-value" id="completion-score">0%</p>
+          <p class="insight-meta" id="summary-meta">No tasks yet – add your first below.</p>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="container layout">
+        <article class="panel panel-form" aria-labelledby="create-task-heading">
+          <h2 id="create-task-heading">Plan your next task</h2>
+          <form id="task-form" novalidate>
+            <div class="field">
+              <label for="task-title">Task *</label>
+              <input id="task-title" name="title" type="text" placeholder="Write release notes for Segfault session…" required />
+              <p class="field-hint" id="title-error" role="alert"></p>
+            </div>
+            <div class="field">
+              <label for="task-notes">Notes</label>
+              <textarea id="task-notes" name="notes" rows="3" placeholder="Capture context, SSH commands, or blockers"></textarea>
+            </div>
+            <div class="field-grid">
+              <label for="task-due">Due date</label>
+              <input id="task-due" name="due" type="date" />
+            </div>
+            <div class="field-grid">
+              <label for="task-priority">Priority</label>
+              <select id="task-priority" name="priority">
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn primary">Add Task</button>
+              <button type="reset" class="btn ghost" id="reset-btn">Reset</button>
+            </div>
+          </form>
+          <div class="helper-text">
+            <p><strong>Tip:</strong> This lab stores tasks in your browser, so you can refresh safely. Exporting notes into the repo keeps your learning trail intact.</p>
+          </div>
+        </article>
+
+        <section class="panel panel-list" aria-labelledby="task-board-heading">
+          <div class="panel-header">
+            <div>
+              <h2 id="task-board-heading">Tasks</h2>
+              <p class="panel-subtitle" id="task-count">0 tasks</p>
+            </div>
+            <div class="filters" role="group" aria-label="Task filters">
+              <button class="filter-btn active" data-filter="all">All</button>
+              <button class="filter-btn" data-filter="active">Active</button>
+              <button class="filter-btn" data-filter="completed">Completed</button>
+            </div>
+          </div>
+
+          <div class="list-toolbar">
+            <label class="search">
+              <span class="material-symbol">🔍</span>
+              <input id="search-input" type="search" placeholder="Search tasks, notes, commands…" />
+            </label>
+            <button id="clear-completed" class="btn ghost" type="button">Clear completed</button>
+          </div>
+
+          <ul id="task-list" class="task-list" aria-live="polite"></ul>
+
+          <template id="task-template">
+            <li class="task-item" data-id="">
+              <label class="task-toggle">
+                <input type="checkbox" />
+                <span class="checkbox"></span>
+              </label>
+              <div class="task-content">
+                <p class="task-title"></p>
+                <p class="task-notes"></p>
+                <div class="task-meta">
+                  <span class="due"></span>
+                  <span class="priority"></span>
+                  <span class="created"></span>
+                </div>
+              </div>
+              <div class="task-actions">
+                <button class="icon-btn edit" type="button" title="Edit task">✏️</button>
+                <button class="icon-btn delete" type="button" title="Delete task">🗑️</button>
+              </div>
+            </li>
+          </template>
+
+          <dialog id="edit-dialog" class="modal">
+            <form method="dialog" id="edit-form">
+              <h3>Edit task</h3>
+              <div class="field">
+                <label for="edit-title">Task *</label>
+                <input id="edit-title" name="title" type="text" required />
+              </div>
+              <div class="field">
+                <label for="edit-notes">Notes</label>
+                <textarea id="edit-notes" name="notes" rows="3"></textarea>
+              </div>
+              <div class="field-grid">
+                <label for="edit-due">Due date</label>
+                <input id="edit-due" name="due" type="date" />
+              </div>
+              <div class="field-grid">
+                <label for="edit-priority">Priority</label>
+                <select id="edit-priority" name="priority">
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+                </select>
+              </div>
+              <menu class="dialog-actions">
+                <button value="cancel" class="btn ghost" type="reset">Cancel</button>
+                <button value="default" class="btn primary" type="submit">Save changes</button>
+              </menu>
+            </form>
+          </dialog>
+
+          <p class="empty-state" id="empty-state">
+            📋 Your list is empty. Add tasks above or import notes from your Segfault sessions.
+          </p>
+        </section>
+      </section>
+
+      <section class="container highlights">
+        <article>
+          <h3>Why this project?</h3>
+          <p>Built as part of the <em>remote Linux lab</em> journey, this front-end practice grounds UI skills in real workflows: recording commands, capturing learnings, and tracking mini-experiments.</p>
+        </article>
+        <article>
+          <h3>Key capabilities</h3>
+          <ul>
+            <li>Persistent storage with <code>localStorage</code></li>
+            <li>Search, filtering, and completion analytics</li>
+            <li>Accessible form validation and keyboard-friendly controls</li>
+            <li>Modular, documented code ready to extend to APIs</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Next steps</h3>
+          <ul>
+            <li>Sync tasks with a backend or GitHub Issues</li>
+            <li>Export reports into the <code>remote-linux-lab</code> notes</li>
+            <li>Deploy to GitHub Pages for public demos</li>
+          </ul>
+        </article>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <div class="container">
+        <p>Crafted by Prashant Bhardwaj — showcasing deliberate practice in front-end engineering.</p>
+      </div>
+    </footer>
+
+    <script src="assets/app.js" type="module"></script>
+  </body>
+</html>
