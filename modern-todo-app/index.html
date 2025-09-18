@@ -13,14 +13,17 @@
     <header class="app-header">
       <div class="container header-content">
         <div>
-          <p class="badge">Segfault Practice Project</p>
+          <p class="badge">Front-End Practice Project</p>
           <h1>FocusFlow</h1>
-          <p class="tagline">A polished to-do experience built while mastering front-end fundamentals, automation, and Linux workflows.</p>
+          <p class="tagline">A polished to-do experience for showcasing interface craftsmanship, product thinking, and deliberate iteration.</p>
         </div>
-        <div class="insight-card" aria-live="polite">
-          <p class="insight-title">Today's Score</p>
-          <p class="insight-value" id="completion-score">0%</p>
-          <p class="insight-meta" id="summary-meta">No tasks yet – add your first below.</p>
+        <div class="header-actions">
+          <button id="theme-toggle" class="btn ghost toggle" type="button" aria-live="polite" aria-label="Toggle theme">Switch to light theme</button>
+          <div class="insight-card" aria-live="polite">
+            <p class="insight-title">Today's Score</p>
+            <p class="insight-value" id="completion-score">0%</p>
+            <p class="insight-meta" id="summary-meta">No tasks yet – add your first below.</p>
+          </div>
         </div>
       </div>
     </header>
@@ -32,12 +35,12 @@
           <form id="task-form" novalidate>
             <div class="field">
               <label for="task-title">Task *</label>
-              <input id="task-title" name="title" type="text" placeholder="Write release notes for Segfault session…" required />
+              <input id="task-title" name="title" type="text" placeholder="Refine onboarding flow copy…" required />
               <p class="field-hint" id="title-error" role="alert"></p>
             </div>
             <div class="field">
               <label for="task-notes">Notes</label>
-              <textarea id="task-notes" name="notes" rows="3" placeholder="Capture context, SSH commands, or blockers"></textarea>
+              <textarea id="task-notes" name="notes" rows="3" placeholder="Capture hypotheses, UX copy, or blockers"></textarea>
             </div>
             <div class="field-grid">
               <label for="task-due">Due date</label>
@@ -57,7 +60,7 @@
             </div>
           </form>
           <div class="helper-text">
-            <p><strong>Tip:</strong> This lab stores tasks in your browser, so you can refresh safely. Exporting notes into the repo keeps your learning trail intact.</p>
+            <p><strong>Tip:</strong> Tasks persist in your browser. Export a JSON snapshot to archive progress or share with collaborators.</p>
           </div>
         </article>
 
@@ -79,8 +82,14 @@
               <span class="material-symbol" aria-hidden="true">🔍</span>
               <input id="search-input" type="search" placeholder="Search tasks, notes, commands…" />
             </label>
-            <button id="clear-completed" class="btn ghost" type="button">Clear completed</button>
+            <div class="toolbar-actions" role="group" aria-label="Task utilities">
+              <button id="export-tasks" class="btn ghost" type="button">Export</button>
+              <button id="import-tasks" class="btn ghost" type="button">Import</button>
+              <button id="clear-completed" class="btn ghost" type="button">Clear completed</button>
+            </div>
           </div>
+
+          <input id="import-file" type="file" accept="application/json" hidden />
 
           <ul id="task-list" class="task-list" aria-live="polite"></ul>
 
@@ -140,31 +149,29 @@
             </form>
           </dialog>
 
-          <p class="empty-state" id="empty-state">
-            📋 Your list is empty. Add tasks above or import notes from your Segfault sessions.
-          </p>
+          <p class="empty-state" id="empty-state">📋 Your list is empty. Add tasks above or import an exported JSON file.</p>
         </section>
       </section>
 
       <section class="container highlights">
         <article>
           <h3>Why this project?</h3>
-          <p>Built as part of the <em>remote Linux lab</em> journey, this front-end practice grounds UI skills in real workflows: recording commands, capturing learnings, and tracking mini-experiments.</p>
+          <p>FocusFlow demonstrates how a simple brief evolves into a refined product: from accessibility to data persistence and delightful details.</p>
         </article>
         <article>
           <h3>Key capabilities</h3>
           <ul>
-            <li>Persistent storage with <code>localStorage</code></li>
-            <li>Search, filtering, and completion analytics</li>
-            <li>Accessible form validation and keyboard-friendly controls</li>
-            <li>Modular, documented code ready to extend to APIs</li>
+            <li>Persistent storage and JSON import/export</li>
+            <li>Search, filtering, completion analytics, and keyboard shortcuts</li>
+            <li>Accessible form validation and dialog editing</li>
+            <li>Theme toggling with graceful animations and system preference detection</li>
           </ul>
         </article>
         <article>
           <h3>Next steps</h3>
           <ul>
             <li>Sync tasks with a backend or GitHub Issues</li>
-            <li>Export reports into the <code>remote-linux-lab</code> notes</li>
+            <li>Export completed items as Markdown to reuse in case studies</li>
             <li>Deploy to GitHub Pages for public demos</li>
           </ul>
         </article>

@@ -1,4 +1,5 @@
 const STORAGE_KEY = 'focusflow.tasks.v1';
+const THEME_KEY = 'focusflow.theme';
 const createId = () =>
   typeof crypto !== 'undefined' && crypto.randomUUID
     ? crypto.randomUUID()
@@ -17,6 +18,10 @@ const emptyState = document.querySelector('#empty-state');
 const filterButtons = document.querySelectorAll('.filter-btn');
 const searchInput = document.querySelector('#search-input');
 const clearCompletedBtn = document.querySelector('#clear-completed');
+const exportBtn = document.querySelector('#export-tasks');
+const importBtn = document.querySelector('#import-tasks');
+const importInput = document.querySelector('#import-file');
+const themeToggle = document.querySelector('#theme-toggle');
 const completionScore = document.querySelector('#completion-score');
 const summaryMeta = document.querySelector('#summary-meta');
 const editDialog = document.querySelector('#edit-dialog');
@@ -30,6 +35,13 @@ let tasks = loadTasks();
 let activeFilter = 'all';
 let searchTerm = '';
 let editingTaskId = null;
+let statusTimeoutId = null;
+let theme = loadTheme();
+
+summaryMeta.dataset.custom = 'false';
+
+applyTheme(theme);
+updateThemeToggleLabel();
 
 render();
 
@@ -83,6 +95,96 @@ clearCompletedBtn.addEventListener('click', () => {
   tasks = tasks.filter((task) => !task.completed);
   saveTasks();
   render();
+  setStatusMessage('Cleared completed tasks.');
+});
+
+exportBtn.addEventListener('click', () => {
+  if (tasks.length === 0) {
+    setStatusMessage('No tasks to export yet.');
+    return;
+  }
+  const payload = {
+    exportedAt: new Date().toISOString(),
+    theme,
+    tasks,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {
+    type: 'application/json',
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  const stamp = new Date().toISOString().replace(/[.:]/g, '-');
+  link.href = url;
+  link.download = `focusflow-tasks-${stamp}.json`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+  setStatusMessage('Export ready — JSON download started.');
+});
+
+importBtn.addEventListener('click', () => {
+  importInput.click();
+});
+
+importInput.addEventListener('change', async (event) => {
+  const file = event.target.files?.[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const parsed = JSON.parse(text);
+    const importedTasks = normalizeImportedTasks(parsed);
+    if (importedTasks.length === 0) {
+      setStatusMessage('No valid tasks found in the file.');
+      return;
+    }
+    tasks = importedTasks;
+    saveTasks();
+    render();
+    if (parsed && typeof parsed === 'object' && (parsed.theme === 'light' || parsed.theme === 'dark')) {
+      theme = parsed.theme;
+      applyTheme(theme);
+      saveTheme(theme);
+      updateThemeToggleLabel();
+    }
+    setStatusMessage(`Imported ${importedTasks.length} task${importedTasks.length === 1 ? '' : 's'}.`);
+  } catch (error) {
+    console.warn('Import failed', error);
+    setStatusMessage('Import failed — ensure the file is a FocusFlow export.');
+  } finally {
+    importInput.value = '';
+  }
+});
+
+themeToggle.addEventListener('click', () => {
+  theme = theme === 'dark' ? 'light' : 'dark';
+  applyTheme(theme);
+  saveTheme(theme);
+  updateThemeToggleLabel();
+  setStatusMessage(`Switched to ${theme} theme.`);
+});
+
+const themeMediaQuery = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)');
+if (themeMediaQuery) {
+  const handleThemePreference = (event) => {
+    if (localStorage.getItem(THEME_KEY)) return;
+    theme = event.matches ? 'light' : 'dark';
+    applyTheme(theme);
+    updateThemeToggleLabel();
+  };
+  if (typeof themeMediaQuery.addEventListener === 'function') {
+    themeMediaQuery.addEventListener('change', handleThemePreference);
+  } else if (typeof themeMediaQuery.addListener === 'function') {
+    themeMediaQuery.addListener(handleThemePreference);
+  }
+}
+
+window.addEventListener('keydown', (event) => {
+  if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+    event.preventDefault();
+    searchInput.focus();
+    setStatusMessage('Search focused — type to filter tasks.');
+  }
 });
 
 taskList.addEventListener('click', (event) => {
@@ -138,8 +240,8 @@ function loadTasks() {
   return [
     {
       id: createId(),
-      title: 'Document Segfault session learnings',
-      notes: 'Summarize SSH commands, limits, and automation experiments in notes/reports.',
+      title: 'Audit empty, loading, and error UI states',
+      notes: 'Capture screenshots for the case study doc and ensure ARIA labels are present.',
       due: new Date().toISOString().slice(0, 10),
       priority: 'high',
       completed: false,
@@ -149,7 +251,7 @@ function loadTasks() {
     {
       id: createId(),
       title: 'Record todo-app demo GIF',
-      notes: 'Capture workflow for portfolio README and share with recruiters.',
+      notes: 'Capture workflow for the README and share with recruiters.',
       due: '',
       priority: 'medium',
       completed: false,
@@ -275,12 +377,17 @@ function updateStats() {
 
   if (total === 0) {
     completionScore.textContent = '0%';
-    summaryMeta.textContent = 'No tasks yet – add your first below.';
+    if (summaryMeta.dataset.custom !== 'true') {
+      summaryMeta.textContent = 'No tasks yet – add your first below.';
+    }
     return;
   }
   const percent = Math.round((completed / total) * 100);
   completionScore.textContent = `${percent}%`;
 
+  if (summaryMeta.dataset.custom === 'true') {
+    return;
+  }
   if (completed === total) {
     summaryMeta.textContent = 'All done! Capture your retrospective notes.';
   } else if (active === total) {
@@ -331,3 +438,73 @@ window.addEventListener('storage', (event) => {
     render();
   }
 });
+
+function setStatusMessage(message) {
+  clearTimeout(statusTimeoutId);
+  summaryMeta.dataset.custom = 'true';
+  summaryMeta.textContent = message;
+  statusTimeoutId = setTimeout(() => {
+    summaryMeta.dataset.custom = 'false';
+    updateStats();
+  }, 4000);
+}
+
+function loadTheme() {
+  const stored = localStorage.getItem(THEME_KEY);
+  if (stored === 'light' || stored === 'dark') {
+    return stored;
+  }
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+    return 'light';
+  }
+  return 'dark';
+}
+
+function saveTheme(value) {
+  localStorage.setItem(THEME_KEY, value);
+}
+
+function applyTheme(value) {
+  document.body.dataset.theme = value;
+}
+
+function updateThemeToggleLabel() {
+  if (!themeToggle) return;
+  const nextTheme = theme === 'dark' ? 'light' : 'dark';
+  const icon = theme === 'dark' ? '🌙' : '🌞';
+  themeToggle.innerHTML = `<span class="theme-icon" aria-hidden="true">${icon}</span>Switch to ${nextTheme} theme`;
+  themeToggle.setAttribute('aria-label', `Switch to ${nextTheme} theme`);
+}
+
+function normalizeImportedTasks(data) {
+  let items = [];
+  if (Array.isArray(data)) {
+    items = data;
+  } else if (Array.isArray(data?.tasks)) {
+    items = data.tasks;
+  }
+
+  return items
+    .map((entry) => {
+      if (typeof entry !== 'object' || entry === null) return null;
+      const title = typeof entry.title === 'string' ? entry.title.trim() : '';
+      if (!title) return null;
+      return {
+        id: entry.id && typeof entry.id === 'string' ? entry.id : createId(),
+        title,
+        notes: typeof entry.notes === 'string' ? entry.notes : '',
+        due: typeof entry.due === 'string' ? entry.due : '',
+        priority: ['high', 'medium', 'low'].includes(entry.priority) ? entry.priority : 'medium',
+        completed: Boolean(entry.completed),
+        createdAt:
+          typeof entry.createdAt === 'string' && !Number.isNaN(Date.parse(entry.createdAt))
+            ? entry.createdAt
+            : new Date().toISOString(),
+        updatedAt:
+          typeof entry.updatedAt === 'string' && !Number.isNaN(Date.parse(entry.updatedAt))
+            ? entry.updatedAt
+            : new Date().toISOString(),
+      };
+    })
+    .filter(Boolean);
+}
