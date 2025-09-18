@@ -25,7 +25,12 @@ test('supports completing and editing a task', async ({ page }) => {
   await page.fill('#task-title', 'Complete-and-edit flow');
   await page.click('button:has-text("Add Task")');
 
-  const target = page.locator('.task-item').filter({ hasText: 'Complete-and-edit flow' });
+  const target = page.locator('.task-item').filter({ hasText: 'Complete-and-edit flow' }).first();
+  const taskId = await target.getAttribute('data-id');
+  if (!taskId) {
+    throw new Error('Expected the newly created task to expose a data-id attribute.');
+  }
+
   const checkbox = target.locator('input[type="checkbox"]');
   await checkbox.check();
   await expect(target).toHaveClass(/completed/);
@@ -35,7 +40,9 @@ test('supports completing and editing a task', async ({ page }) => {
   await expect(dialog).toBeVisible();
   await page.fill('#edit-title', 'Edited focus item');
   await page.click('#edit-form button:has-text("Save changes")');
-  await expect(target.locator('.task-title')).toHaveText('Edited focus item');
+
+  const updatedTask = page.locator(`.task-item[data-id="${taskId}"]`);
+  await expect(updatedTask.locator('.task-title')).toHaveText('Edited focus item');
 });
 
 test('theme toggle updates the label and body data attribute', async ({ page }) => {
