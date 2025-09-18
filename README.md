@@ -1,10 +1,10 @@
 # FocusFlow – Front-End To-Do Practice Lab
 
-FocusFlow is a recruiter-friendly to-do experience designed to spotlight HTML, CSS, and vanilla JavaScript craftsmanship. The repo started as raw markup drills and now ships a production-ready interface with deployment automation.
+FocusFlow is my personal front-end lab for sharpening HTML, CSS, and vanilla JavaScript skills. The project grew from raw markup drills into a production-style app so I can practice real-world patterns—state management, theming, automation, and testing—without hiding behind frameworks.
 
 ![FocusFlow screenshot](modern-todo-app/assets/focusflow-banner.png)
 
-> ✨ Built to showcase front-end iteration: deliberate UX decisions, clean architecture, and documentation that helps reviewers follow the story.
+> ✨ Built to track my own progress: every iteration documents what I learned, why I changed it, and how the stack evolved.
 
 ---
 
@@ -35,7 +35,7 @@ docker run -p 8080:80 focusflow
 
 Visit `http://localhost:8080` to interact with the app served via Nginx.
 
-> Tip: Capture a short GIF of the workflow (add → filter → edit → export) to embed in your portfolio.
+> Practice idea: record a short GIF after each milestone (add → filter → edit → export) so you can compare how the UI feels as you refactor.
 
 ---
 
@@ -64,7 +64,7 @@ FrontEnd_ToDo_practice/
     └── StaticTodo/               # Foundational HTML markup exercises
 ```
 
-The `archive/` directory preserves the learning journey from raw HTML to a polished app—useful when discussing growth with recruiters.
+The `archive/` directory preserves each iteration so I can review how my approach changed over time—from HTML-only experiments to the current build.
 
 ---
 
@@ -97,6 +97,6 @@ The `archive/` directory preserves the learning journey from raw HTML to a polis
 
 ---
 
-## 🤝 About
+## 🧭 Why it matters to me
 
-Crafted by **Prashant Bhardwaj** to demonstrate front-end craftsmanship. Recruiters can dive straight into `modern-todo-app/` for the polished experience, then explore `docs/` and `archive/` to trace the learning progression.
+I’m using FocusFlow to become a more thoughtful front-end engineer: balancing UX polish with maintainable code, automation, and documentation. If you’re exploring the repo, start with `modern-todo-app/` for the current build, then dip into `docs/` and `archive/` to see the experiments and the lessons behind each change.
