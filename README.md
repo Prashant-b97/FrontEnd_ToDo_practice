@@ -74,6 +74,20 @@ The `archive/` directory preserves the learning journey from raw HTML to a polis
 - Dockerfile in the same directory serves the static bundle via Nginx for local demos or container platforms.
 - `.dockerignore` keeps the image lean by excluding Git metadata and temporary files.
 
+## ✅ Automated Testing
+
+- End-to-end coverage powered by Playwright (`npm test`) lives in `tests/` with configuration in `playwright.config.ts`.
+- Tests boot a static server via `http-server`, exercise the key UX flows (add/edit/complete/export, theme toggle), and capture downloads.
+- Run locally with:
+
+  ```bash
+  npm install
+  npx playwright install
+  npm test
+  ```
+
+- GitHub Actions workflow (`.github/workflows/test.yml`) executes the same suite on every push and pull request so regressions surface immediately.
+
 ## 📈 Roadmap Ideas
 
 - Wire tasks to Supabase/Firebase for real-time sync and authentication.
