@@ -1,16 +1,16 @@
 # Stage 1: Base image
-# Hum ek halka Nginx server image use kar rahe hain.
+# Use a lightweight Nginx server image.
 FROM nginx:1.25-alpine
 
-# Default Nginx welcome page ko hata dein.
+# Remove the default Nginx welcome page.
 RUN rm -rf /usr/share/nginx/html/*
 
-# Apne project ke static files ko Nginx ke public directory mein copy karein.
+# Copy the project static files into Nginx's public directory.
 COPY ./index.html /usr/share/nginx/html/
 COPY ./assets/ /usr/share/nginx/html/assets/
 
-# Container ke port 80 ko bahar ki duniya ke liye expose karein.
+# Expose port 80 from the container to the host.
 EXPOSE 80
 
-# Container start hone par Nginx ko foreground mein chalane ki command.
+# Run Nginx in the foreground when the container starts.
 CMD ["nginx", "-g", "daemon off;"]
